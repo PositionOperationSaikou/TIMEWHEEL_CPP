@@ -1,4 +1,5 @@
 #include "TimeWheel.h"
+#include <cstdint>
 #include <memory>
 #include <utility>
 
@@ -57,7 +58,7 @@ bool TimeWheel::executeTask(std::unique_ptr<Task>&& task)
 }
 
 
-void TimeWheel::cascadeL3(unsigned int pos)
+void TimeWheel::cascadeL3(uint32_t pos)
 {
 	while(!slotL3[pos].empty())
 	{
@@ -67,7 +68,7 @@ void TimeWheel::cascadeL3(unsigned int pos)
 	}	
 }
 
-void TimeWheel::cascadeL2(unsigned int pos)
+void TimeWheel::cascadeL2(uint32_t pos)
 {
 	while(!slotL2[pos].empty())
 	{

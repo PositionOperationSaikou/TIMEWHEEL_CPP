@@ -3,19 +3,30 @@
 
 #include <array>
 #include <cstdint>
+#include <iterator>
 #include <memory>
 #include <queue>
 #include <memory>
 #include <functional>
 #include <ctime>
 #include <stdint.h>
+#include <type_traits>
+#include <utility>
 
 typedef uint64_t Tick;
 
 struct Task
 {
-	const unsigned int _id;
-	const unsigned int _delay;
+	template<typename F>
+	Task(uint32_t id, uint32_t delay, F&& func, bool isLoopExecution):
+		_id(id), _delay(delay), _func(std::forward(func)), _isLoopExecution(isLoopExecution)
+	{
+		using storedFunc = std::decay_t<F>;
+		static_assert(std::is_nothrow_invocable_r_v<void, storedFunc>, "Task callback must be callable as void() noexcept");
+	};
+
+	const uint32_t _id;
+	const uint32_t _delay;
 	const std::function<void()> _func;
 	const bool _isLoopExecution;
 };
@@ -25,7 +36,6 @@ struct TimerEntry
 	Tick _expireTick; 
 	std::unique_ptr<Task> _task;
 };
-
 
 class TimeWheel
 {
@@ -50,5 +60,4 @@ private:
 	Slot slotL3;
 	Tick currentTick = 0;
 };
-
 #endif
