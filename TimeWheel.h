@@ -23,7 +23,7 @@ struct Task
 	{
 		using storedFunc = std::decay_t<F>;
 		static_assert(std::is_nothrow_invocable_r_v<void, storedFunc&>, "Task callback must be callable as void() noexcept");
-	};
+	}
 
 	const uint32_t _id;
 	const uint32_t _delay;
