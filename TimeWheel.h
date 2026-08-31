@@ -19,10 +19,10 @@ struct Task
 {
 	template<typename F>
 	Task(uint32_t id, uint32_t delay, F&& func, bool isLoopExecution):
-		_id(id), _delay(delay), _func(std::forward(func)), _isLoopExecution(isLoopExecution)
+		_id(id), _delay(delay), _func(std::forward<F>(func)), _isLoopExecution(isLoopExecution)
 	{
 		using storedFunc = std::decay_t<F>;
-		static_assert(std::is_nothrow_invocable_r_v<void, storedFunc>, "Task callback must be callable as void() noexcept");
+		static_assert(std::is_nothrow_invocable_r_v<void, storedFunc&>, "Task callback must be callable as void() noexcept");
 	};
 
 	const uint32_t _id;
